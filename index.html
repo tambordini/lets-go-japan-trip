@@ -61,6 +61,26 @@
 
   <div id="map"></div>
 
+  <div id="editor-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="editor-title">แก้ไขแผน</h3>
+        <button id="editor-close" class="modal-close">&#x2715;</button>
+      </div>
+      <p id="editor-server-update" class="server-update-notice" style="display:none"></p>
+      <label class="modal-label">สถานที่
+        <input type="text" id="editor-place" class="modal-input" />
+      </label>
+      <label class="modal-label">กิจกรรม (แต่ละบรรทัด = 1 กิจกรรม)
+        <textarea id="editor-acts" class="modal-textarea" rows="4"></textarea>
+      </label>
+      <div class="modal-actions">
+        <button id="editor-save" class="btn-primary">บันทึก</button>
+        <button id="editor-cancel" class="btn-secondary">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="config.js"></script>
   <script src="db.js"></script>
