@@ -30,13 +30,11 @@ async function saveEditor() {
     .split('\n').map(s => s.trim()).filter(Boolean);
 
   const newDetails = Object.assign({}, _editingDay.details, { place, acts });
-  const { data: userData } = await db.auth.getUser();
-
   const { data, error } = await db.rpc('update_day_if_version', {
     p_id: _editingDay.id,
     p_expected_version: _editingDay.version,
     p_changes: newDetails,
-    p_actor: userData.user.id,
+    p_actor: null,
   });
 
   saveBtn.disabled = false;

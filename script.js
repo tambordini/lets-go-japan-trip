@@ -186,11 +186,10 @@ setInterval(spawnPetal, 950);
 })();
 
 async function initApp() {
-  const user = await initAuth();
   DAYS = await loadDays();
   renderSidebar(DAYS);
   renderMap(DAYS);
-  initRealtime(user);
+  initRealtime();
 }
 
 initApp();

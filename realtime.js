@@ -1,5 +1,5 @@
 // realtime.js
-function initRealtime(user) {
+function initRealtime() {
   db.channel('days-changes')
     .on('postgres_changes', {
       event: '*',
@@ -7,12 +7,12 @@ function initRealtime(user) {
       table: 'days',
       filter: 'itinerary_id=eq.' + window.TRIP_ITINERARY_ID,
     }, (payload) => {
-      handleDayChange(payload, user);
+      handleDayChange(payload);
     })
     .subscribe();
 }
 
-function handleDayChange(payload, currentUser) {
+function handleDayChange(payload) {
   const { eventType } = payload;
   const newRow = payload.new;
   const oldRow = payload.old;
