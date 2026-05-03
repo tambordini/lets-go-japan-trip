@@ -638,4 +638,3 @@ body::before {
   border: none; border-radius: 8px; font-size: 0.95rem; cursor: pointer;
 }
 .auth-feedback { font-size: 0.82rem; margin-top: 0.75rem; color: #666; }
-}
