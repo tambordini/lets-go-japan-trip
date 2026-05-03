@@ -525,3 +525,90 @@ body::before {
     opacity: 0;
   }
 }
+
+/* ═══════════════════════════════
+   MOBILE  (≤ 640px)
+═══════════════════════════════ */
+@media (max-width: 640px) {
+  #map {
+    position: fixed;
+    inset: 0;
+    height: 100vh;
+    z-index: 1;
+  }
+
+  /* backdrop sits between map(z:1) and sidebar(z:50) to catch outside taps */
+  #sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    background: transparent;
+  }
+
+  #sidebar-backdrop.active {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 78vh;
+    border-right: none;
+    border-top: 1px solid var(--line);
+    border-radius: 18px 18px 0 0;
+    transform: translateY(calc(100% - 94px));
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 50;
+    box-shadow: 0 -6px 30px rgba(42, 32, 24, 0.1);
+  }
+
+  .sidebar.open {
+    transform: translateY(0);
+  }
+
+  /* pull handle bar */
+  .sidebar::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 32px;
+    height: 3px;
+    background: rgba(42, 32, 24, 0.18);
+    border-radius: 2px;
+    margin: 10px auto 0;
+  }
+
+  .header {
+    padding: 8px 16px 12px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .header-title {
+    font-size: 19px;
+  }
+
+  .header-sub {
+    display: none;
+  }
+
+  .stamp {
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 12px;
+  }
+
+  .day-list {
+    overscroll-behavior: contain;
+  }
+
+  .footer {
+    display: none;
+  }
+}

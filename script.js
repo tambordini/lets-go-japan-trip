@@ -209,6 +209,9 @@ function goTo(i) {
   map.flyTo([ITINERARY[i].lat, ITINERARY[i].lng], 12, { duration: 1.1 });
   map.once('moveend', () => markers[i].openPopup());
   setActive(i);
+  if (window.innerWidth <= 640 && window._closeMobileDrawer) {
+    window._closeMobileDrawer();
+  }
 }
 
 map.fitBounds(L.latLngBounds(coords), { padding: [40, 60] });
@@ -229,3 +232,38 @@ function spawnPetal() {
 
 for (let i = 0; i < 14; i++) setTimeout(spawnPetal, i * 250);
 setInterval(spawnPetal, 950);
+
+// ─── Mobile bottom drawer ─────────────────────────────────────────────────
+(function initMobileDrawer() {
+  const sidebar = document.querySelector('.sidebar');
+  const header = document.querySelector('.header');
+
+  // Transparent backdrop sits between map (z:1) and sidebar (z:50)
+  // so tapping outside the sidebar dismisses it without triggering the map
+  const backdrop = document.createElement('div');
+  backdrop.id = 'sidebar-backdrop';
+  document.body.appendChild(backdrop);
+
+  function isMobile() { return window.innerWidth <= 640; }
+
+  function openDrawer() {
+    sidebar.classList.add('open');
+    backdrop.classList.add('active');
+  }
+
+  function closeDrawer() {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('active');
+  }
+
+  header.addEventListener('click', (e) => {
+    if (!isMobile()) return;
+    e.stopPropagation();
+    sidebar.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+
+  backdrop.addEventListener('click', closeDrawer);
+
+  // expose for goTo
+  window._closeMobileDrawer = closeDrawer;
+})();
