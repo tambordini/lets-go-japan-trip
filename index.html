@@ -81,6 +81,30 @@
     </div>
   </div>
 
+  <div id="conflict-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>&#x26A0;&#xFE0F; ข้อมูลถูกแก้โดยคนอื่น</h3>
+        <button id="conflict-close" class="modal-close">&#x2715;</button>
+      </div>
+      <p class="conflict-desc">ข้อมูลใน server เปลี่ยนไปแล้วขณะที่คุณกำลังแก้</p>
+      <div class="conflict-compare">
+        <div class="conflict-col">
+          <div class="conflict-col-label">ของคุณ</div>
+          <pre id="conflict-mine" class="conflict-pre"></pre>
+        </div>
+        <div class="conflict-col">
+          <div class="conflict-col-label">ล่าสุดใน server</div>
+          <pre id="conflict-server" class="conflict-pre"></pre>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="conflict-overwrite" class="btn-primary">บันทึกของฉัน (เขียนทับ)</button>
+        <button id="conflict-discard" class="btn-secondary">ใช้ของ server</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="config.js"></script>
   <script src="db.js"></script>
