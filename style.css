@@ -612,3 +612,30 @@ body::before {
     display: none;
   }
 }
+
+/* Auth Overlay */
+.auth-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(250, 246, 240, 0.97);
+  display: flex; align-items: center; justify-content: center;
+}
+.auth-overlay.hidden { display: none; }
+.auth-box {
+  text-align: center; padding: 2.5rem 2rem;
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  max-width: 340px; width: 90%;
+}
+.auth-title { font-size: 1.4rem; margin: 1rem 0 0.25rem; }
+.auth-desc { color: #888; font-size: 0.85rem; margin-bottom: 1.2rem; }
+.auth-input {
+  width: 100%; padding: 0.65rem 1rem; border-radius: 8px;
+  border: 1px solid #ddd; font-size: 0.95rem; margin-bottom: 0.75rem;
+  box-sizing: border-box;
+}
+.auth-submit {
+  width: 100%; padding: 0.7rem; background: #C85C3A; color: #fff;
+  border: none; border-radius: 8px; font-size: 0.95rem; cursor: pointer;
+}
+.auth-feedback { font-size: 0.82rem; margin-top: 0.75rem; color: #666; }
+}
