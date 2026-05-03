@@ -94,7 +94,7 @@ ITINERARY.forEach((d, i) => {
   item.dataset.i = i;
   item.style.animationDelay = `${i * 0.07 + 0.1}s`;
 
-  const pin = append(el('div', 's-pin'), el('span', 's-pin-num', String(d.day)));
+  const pin = append(el('div', 's-pin'), el('span', 's-pin-num', String(i + 1)));
 
   const info = el('div', 'day-info');
   const meta = el('div', 'day-meta');
@@ -143,10 +143,10 @@ setTimeout(() => {
 }, 500);
 
 // ─── Popup builder (DOM element passed to Leaflet — no innerHTML) ─────────
-function buildPopup(d) {
+function buildPopup(d, i) {
   const pop = el('div', 'pop');
   append(pop,
-    el('div', 'pop-label', `Day ${d.day}`),
+    el('div', 'pop-label', `Day ${i + 1}`),
     el('div', 'pop-title', d.place),
     el('div', 'pop-jp', d.jp),
   );
@@ -164,14 +164,14 @@ function buildPopup(d) {
 const markers = ITINERARY.map((d, i) => {
   const icon = L.divIcon({
     className: '',
-    html: `<div class="mk" id="mk${i}"><span class="mn">${d.day}</span></div>`,
+    html: `<div class="mk" id="mk${i}"><span class="mn">${i + 1}</span></div>`,
     iconSize: [34, 42],
     iconAnchor: [17, 41],
     popupAnchor: [0, -44],
   });
 
   const m = L.marker([d.lat, d.lng], { icon })
-    .bindPopup(buildPopup(d), { maxWidth: 280 })
+    .bindPopup(buildPopup(d, i), { maxWidth: 280 })
     .addTo(map);
 
   m.on('click', () => setActive(i));
