@@ -39,6 +39,14 @@ function renderSidebar(days) {
     append(info, el('div', 'day-place', det.place), el('div', 'day-detail', (det.acts || [])[0] || ''), meta);
     append(item, pin, info, editBtn);
     item.addEventListener('click', () => goTo(i));
+    item.addEventListener('mouseenter', () => {
+      const leg = (window._legLines || [])[i - 1];
+      if (leg) leg.setStyle({ weight: 3, opacity: 0.9, dashArray: null });
+    });
+    item.addEventListener('mouseleave', () => {
+      const leg = (window._legLines || [])[i - 1];
+      if (leg) leg.setStyle({ weight: 1.5, opacity: 0.45, dashArray: '5 7' });
+    });
     listEl.appendChild(item);
   });
 }
@@ -75,21 +83,28 @@ function renderMap(days) {
   markers = [];
 
   const coords = days.map(d => [d.details.lat, d.details.lng]);
-  if (window._routeLine) map.removeLayer(window._routeLine);
-  window._routeLine = L.polyline(coords, {
-    color: '#C85C3A', weight: 1.5, opacity: 0.5, dashArray: '5 7',
-  }).addTo(map);
+
+  (window._legLines || []).forEach(l => map.removeLayer(l));
+  window._legLines = [];
+  for (let i = 1; i < coords.length; i++) {
+    const leg = L.polyline([coords[i - 1], coords[i]], {
+      color: '#C85C3A', weight: 1.5, opacity: 0.45, dashArray: '5 7',
+    }).addTo(map);
+    window._legLines.push(leg);
+  }
 
   setTimeout(() => {
-    const svgPath = window._routeLine.getElement();
-    if (!svgPath) return;
-    if (window._marchRafId) cancelAnimationFrame(window._marchRafId);
-    let offset = 0;
-    (function march() {
-      offset -= 0.5;
-      svgPath.style.strokeDashoffset = offset;
-      window._marchRafId = requestAnimationFrame(march);
-    })();
+    (window._legLines || []).forEach(leg => {
+      const svgPath = leg.getElement();
+      if (!svgPath) return;
+      let offset = 0;
+      if (window._marchRafId) cancelAnimationFrame(window._marchRafId);
+      (function march() {
+        offset -= 0.5;
+        svgPath.style.strokeDashoffset = offset;
+        window._marchRafId = requestAnimationFrame(march);
+      })();
+    });
   }, 500);
 
   days.forEach((d, i) => {
