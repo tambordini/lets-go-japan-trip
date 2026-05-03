@@ -295,6 +295,12 @@ body::before {
   color: var(--gray);
 }
 
+.distance-tag {
+  font-size: 10px;
+  color: var(--blue);
+  font-family: "Libre Baskerville", serif;
+}
+
 /* Footer */
 .footer {
   padding: 13px 22px;
@@ -443,6 +449,12 @@ body::before {
   margin-top: 10px;
   font-size: 11px;
   color: var(--gray);
+}
+
+.pop-distance {
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--blue);
 }
 
 /* ─── Map markers (teardrop) ─── */

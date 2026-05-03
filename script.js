@@ -1,4 +1,13 @@
 // script.js
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+
 function el(tag, cls, text) {
   const e = document.createElement(tag);
   if (cls) e.className = cls;
@@ -30,6 +39,11 @@ function renderSidebar(days) {
     );
     if (det.travel) {
       meta.appendChild(el('span', 'travel-tag', det.travel.icon + ' ' + det.travel.time));
+    }
+    if (i > 0) {
+      const prev = days[i - 1].details;
+      const km = haversineKm(prev.lat, prev.lng, det.lat, det.lng);
+      meta.appendChild(el('span', 'distance-tag', '📍 ' + Math.round(km) + ' km'));
     }
 
     const editBtn = el('button', 'edit-day-btn', '\u270f\ufe0f');
@@ -65,6 +79,11 @@ function buildPopup(d, i) {
   if (det.travel) {
     pop.appendChild(el('div', 'pop-travel',
       det.travel.icon + ' เดินทาง ' + det.travel.time + ' จากจุดก่อนหน้า'));
+  }
+  if (i > 0) {
+    const prev = DAYS[i - 1].details;
+    const km = haversineKm(prev.lat, prev.lng, det.lat, det.lng);
+    pop.appendChild(el('div', 'pop-distance', '📐 ระยะทางตรง ' + Math.round(km) + ' km'));
   }
   return pop;
 }
