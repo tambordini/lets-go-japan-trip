@@ -83,11 +83,12 @@ function renderMap(days) {
   setTimeout(() => {
     const svgPath = window._routeLine.getElement();
     if (!svgPath) return;
+    if (window._marchRafId) cancelAnimationFrame(window._marchRafId);
     let offset = 0;
     (function march() {
       offset -= 0.5;
       svgPath.style.strokeDashoffset = offset;
-      requestAnimationFrame(march);
+      window._marchRafId = requestAnimationFrame(march);
     })();
   }, 500);
 
@@ -129,6 +130,7 @@ function renderMap(days) {
 }
 
 function setActive(i) {
+  if (!DAYS[i]) return;
   document.querySelectorAll('.day-item').forEach(e => e.classList.remove('active'));
   const activeItem = document.querySelectorAll('.day-item')[i];
   if (activeItem) {
