@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Let's Go Japan ✈</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+Thai:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="petals"></div>
+
+  <aside class="sidebar">
+    <div class="header">
+      <div class="stamp">
+        <span class="stamp-top">TRIP</span>
+        <span class="stamp-jp">日本</span>
+        <span class="stamp-year">2025</span>
+      </div>
+      <p class="header-label">Our Journey</p>
+      <h1 class="header-title">Let's Go<br /><em>Japan</em></h1>
+      <p class="header-sub">8 วัน · 6 จุดหมาย · ไม่รู้ลืม</p>
+    </div>
+
+    <div class="day-list" id="dayList"></div>
+
+    <div class="footer">
+      <p class="footer-hint">คลิก pin บนแผนที่ หรือรายการด้านบน</p>
+      <div class="legend">
+        <div class="leg">
+          <div class="leg-dot"></div><span>จุดหมาย</span>
+        </div>
+        <div class="leg">
+          <div class="leg-line"></div><span>เส้นทาง</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
