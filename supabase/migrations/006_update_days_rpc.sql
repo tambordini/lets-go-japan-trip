@@ -44,8 +44,8 @@ BEGIN
     details          = p_changes,
     version          = version + 1,
     updated_at       = now(),
-    last_editor_name = COALESCE(p_actor, last_editor_name),
-    last_editor_at   = COALESCE(p_actor_at::timestamptz, now())
+    last_editor_name = CASE WHEN p_actor IS NOT NULL THEN p_actor ELSE last_editor_name END,
+    last_editor_at   = CASE WHEN p_actor IS NOT NULL THEN p_actor_at::timestamptz ELSE last_editor_at END
   WHERE id = p_id
   RETURNING * INTO v_row;
 
