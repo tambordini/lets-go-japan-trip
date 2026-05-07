@@ -648,8 +648,8 @@ body::before {
   }
 
   .stamp {
-    width: 40px;
-    height: 40px;
+    width: 52px;
+    height: 52px;
     top: 10px;
     right: 12px;
   }
@@ -859,7 +859,9 @@ body::before {
   font-size: 1rem;
   font-weight: 600;
   color: #333;
-  transition: border-color 0.15s, background 0.15s;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
 }
 .member-btn:hover {
   border-color: #6366f1;

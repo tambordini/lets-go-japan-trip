@@ -25,8 +25,8 @@ let map, markers = [], curIdx = null;
 function formatTimeAgo(isoString) {
   if (!isoString) return '';
   const diffSec = Math.floor((Date.now() - new Date(isoString)) / 1000);
-  if (diffSec < 60)    return 'เมื่อกี้';
-  if (diffSec < 3600)  return Math.floor(diffSec / 60) + ' นาทีที่แล้ว';
+  if (diffSec < 60) return 'เมื่อกี้';
+  if (diffSec < 3600) return Math.floor(diffSec / 60) + ' นาทีที่แล้ว';
   if (diffSec < 86400) return Math.floor(diffSec / 3600) + ' ชม.ที่แล้ว';
   return Math.floor(diffSec / 86400) + ' วันที่แล้ว';
 }
