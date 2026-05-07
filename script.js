@@ -22,6 +22,15 @@ function append(parent, ...children) {
 let DAYS = [];
 let map, markers = [], curIdx = null;
 
+function formatTimeAgo(isoString) {
+  if (!isoString) return '';
+  const diffSec = Math.floor((Date.now() - new Date(isoString)) / 1000);
+  if (diffSec < 60)    return 'เมื่อกี้';
+  if (diffSec < 3600)  return Math.floor(diffSec / 60) + ' นาทีที่แล้ว';
+  if (diffSec < 86400) return Math.floor(diffSec / 3600) + ' ชม.ที่แล้ว';
+  return Math.floor(diffSec / 86400) + ' วันที่แล้ว';
+}
+
 function renderSidebar(days) {
   const listEl = document.getElementById('dayList');
   listEl.textContent = '';
@@ -61,6 +70,12 @@ function renderSidebar(days) {
       const leg = (window._legLines || [])[i - 1];
       if (leg) leg.setStyle({ weight: 1.5, opacity: 0.45, dashArray: '5 7' });
     });
+    if (d.last_editor_name) {
+      const stamp = el('small', 'day-editor',
+        'แก้โดย: ' + d.last_editor_name + ' · เมื่อ ' + formatTimeAgo(d.last_editor_at)
+      );
+      append(item, stamp);
+    }
     listEl.appendChild(item);
   });
 }
@@ -220,6 +235,7 @@ setInterval(spawnPetal, 950);
 })();
 
 async function initApp() {
+  await ensureMemberSelected();
   DAYS = await loadDays();
   renderSidebar(DAYS);
   renderMap(DAYS);

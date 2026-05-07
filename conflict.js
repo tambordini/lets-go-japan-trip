@@ -21,12 +21,12 @@ function closeConflictModal() {
 document.getElementById('conflict-overwrite').addEventListener('click', async () => {
   if (!_conflictContext) return;
   const { editingDay, myChanges, serverRow } = _conflictContext;
-  const { data: userData } = await db.auth.getUser();
   const { data, error } = await db.rpc('update_day_if_version', {
-    p_id: editingDay.id,
+    p_id:               editingDay.id,
     p_expected_version: serverRow.version,
-    p_changes: myChanges,
-    p_actor: userData.user.id,
+    p_changes:          myChanges,
+    p_actor:            window.currentMember ? window.currentMember.name : null,
+    p_actor_at:         new Date().toISOString(),
   });
   if (error || !data.ok) { alert('บันทึกไม่สำเร็จ กรุณาลองใหม่'); return; }
   const idx = DAYS.findIndex(d => d.id === editingDay.id);
