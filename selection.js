@@ -22,6 +22,9 @@ async function ensureMemberSelected() {
     return;
   }
 
+  const splash = document.getElementById('splash');
+  if (splash) splash.classList.add('hidden');
+
   const modal = document.getElementById('selection-modal');
   const list = document.getElementById('selection-list');
 
@@ -35,6 +38,8 @@ async function ensureMemberSelected() {
         localStorage.setItem('selectedMemberName', m.name);
         window.currentMember = { id: m.id, name: m.name };
         modal.classList.add('hidden');
+        const splash = document.getElementById('splash');
+        if (splash) splash.classList.remove('hidden');
         resolve();
       };
       append(list, btn);

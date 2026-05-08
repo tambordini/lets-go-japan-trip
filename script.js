@@ -240,6 +240,9 @@ async function initApp() {
   renderSidebar(DAYS);
   renderMap(DAYS);
   initRealtime();
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hidden');
+  }, 1000);
 }
 
 initApp();
