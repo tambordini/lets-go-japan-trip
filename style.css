@@ -38,7 +38,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    visibility 0.5s ease;
 }
 
 #splash.hidden {
@@ -132,7 +134,9 @@ body {
 }
 
 @keyframes splashBounce {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0.6);
     opacity: 0.4;
   }
@@ -264,6 +268,27 @@ body::before {
   font-size: 11.5px;
   color: var(--gray);
   font-weight: 300;
+}
+
+.route-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--gray);
+  font-size: 11px;
+  font-family: "Libre Baskerville", serif;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.route-btn:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(200, 92, 58, 0.04);
 }
 
 /* Day list */
@@ -518,6 +543,34 @@ body::before {
   max-width: 260px;
 }
 
+.pop-img-wrap {
+  margin: -18px -22px 12px;
+  border-radius: 2px 2px 0 0;
+  overflow: hidden;
+  height: 130px;
+  background: #f0ede3;
+}
+
+.pop-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pop-img-placeholder {
+  margin: -18px -22px 12px;
+  height: 130px;
+  background: linear-gradient(135deg, var(--cream) 0%, #ece6d4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-family: "Cormorant Garamond", serif;
+  color: var(--gray);
+  opacity: 0.4;
+}
+
 .pop-label {
   font-family: "Libre Baskerville", serif;
   font-size: 8.5px;
@@ -578,80 +631,6 @@ body::before {
   margin-top: 5px;
   font-size: 11px;
   color: var(--blue);
-}
-
-.pop-gmaps {
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 11px;
-  color: var(--red);
-  text-decoration: none;
-  font-weight: 600;
-  padding: 5px 10px;
-  border: 1px solid var(--red);
-  border-radius: 6px;
-  transition: background 0.15s, color 0.15s;
-}
-.pop-gmaps:hover {
-  background: var(--red);
-  color: #fff;
-}
-
-.route-btn {
-  display: block;
-  margin-top: 10px;
-  width: 100%;
-  padding: 7px 0;
-  background: none;
-  border: 1px solid var(--red);
-  border-radius: 6px;
-  color: var(--red);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s, color 0.15s;
-}
-.route-btn:hover {
-  background: var(--red);
-  color: #fff;
-}
-
-.pop-gmaps {
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 11px;
-  color: var(--red);
-  text-decoration: none;
-  font-weight: 600;
-  padding: 5px 10px;
-  border: 1px solid var(--red);
-  border-radius: 6px;
-  transition: background 0.15s, color 0.15s;
-}
-.pop-gmaps:hover {
-  background: var(--red);
-  color: #fff;
-}
-
-.route-btn {
-  display: block;
-  margin-top: 10px;
-  width: 100%;
-  padding: 7px 0;
-  background: none;
-  border: 1px solid var(--red);
-  border-radius: 6px;
-  color: var(--red);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s, color 0.15s;
-}
-.route-btn:hover {
-  background: var(--red);
-  color: #fff;
 }
 
 /* ─── Map markers (teardrop) ─── */

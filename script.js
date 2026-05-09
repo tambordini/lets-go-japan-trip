@@ -83,6 +83,18 @@ function renderSidebar(days) {
 function buildPopup(d, i) {
   const det = d.details;
   const pop = el('div', 'pop');
+  if (det.img) {
+    const imgWrap = el('div', 'pop-img-wrap');
+    const img = el('img', 'pop-img');
+    img.src = det.img;
+    img.alt = det.place;
+    imgWrap.appendChild(img);
+    pop.appendChild(imgWrap);
+  } else {
+    const ph = el('div', 'pop-img-placeholder');
+    ph.textContent = (det.place || '')[0] || '?';
+    pop.appendChild(ph);
+  }
   append(pop,
     el('div', 'pop-label', 'Day ' + (i + 1)),
     el('div', 'pop-title', det.place),
