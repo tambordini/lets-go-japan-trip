@@ -100,6 +100,11 @@ function buildPopup(d, i) {
     const km = haversineKm(prev.lat, prev.lng, det.lat, det.lng);
     pop.appendChild(el('div', 'pop-distance', '📐 ระยะทางตรง ' + Math.round(km) + ' km'));
   }
+  const gmLink = el('a', 'pop-gmaps', '📍 เปิดใน Google Maps');
+  gmLink.href = 'https://www.google.com/maps?q=' + det.lat + ',' + det.lng;
+  gmLink.target = '_blank';
+  gmLink.rel = 'noopener';
+  pop.appendChild(gmLink);
   return pop;
 }
 
@@ -242,6 +247,17 @@ async function initApp() {
   renderSidebar(DAYS);
   renderMap(DAYS);
   initRealtime();
+
+  document.getElementById('openRouteBtn').addEventListener('click', () => {
+    if (DAYS.length < 2) return;
+    const origin = DAYS[0].details.lat + ',' + DAYS[0].details.lng;
+    const dest = DAYS[DAYS.length - 1].details.lat + ',' + DAYS[DAYS.length - 1].details.lng;
+    const waypoints = DAYS.slice(1, -1).map(d => d.details.lat + ',' + d.details.lng).join('|');
+    let url = 'https://www.google.com/maps/dir/?api=1&origin=' + origin + '&destination=' + dest;
+    if (waypoints) url += '&waypoints=' + waypoints;
+    window.open(url, '_blank');
+  });
+
   setTimeout(() => {
     document.getElementById('splash').classList.add('hidden');
   }, 1000);
