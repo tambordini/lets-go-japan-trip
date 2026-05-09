@@ -127,18 +127,20 @@ function renderMap(days) {
     window._legLines.push(leg);
   }
 
-  setTimeout(() => {
+  if (window._marchOffset === undefined) window._marchOffset = 0;
+  if (window._marchRafId) cancelAnimationFrame(window._marchRafId);
+
+  function marchAll() {
+    window._marchOffset -= 0.5;
     (window._legLines || []).forEach(leg => {
       const svgPath = leg.getElement();
-      if (!svgPath) return;
-      let offset = 0;
-      if (window._marchRafId) cancelAnimationFrame(window._marchRafId);
-      (function march() {
-        offset -= 0.5;
-        svgPath.style.strokeDashoffset = offset;
-        window._marchRafId = requestAnimationFrame(march);
-      })();
+      if (svgPath) svgPath.style.strokeDashoffset = window._marchOffset;
     });
+    window._marchRafId = requestAnimationFrame(marchAll);
+  }
+
+  setTimeout(() => {
+    marchAll();
   }, 500);
 
   days.forEach((d, i) => {
