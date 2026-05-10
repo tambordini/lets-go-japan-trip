@@ -120,9 +120,10 @@ body {
 
 .splash-loader {
   display: flex;
-  gap: 8px;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 18px;
+  gap: 6px;
+  margin-bottom: 20px;
 }
 
 .splash-dot {
@@ -130,23 +131,27 @@ body {
   height: 8px;
   border-radius: 50%;
   background: var(--red);
-  animation: splashBounce 1.2s ease-in-out infinite;
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.splash-dot:nth-child(1) {
+  animation-delay: 0s;
 }
 
 .splash-dot:nth-child(2) {
-  animation-delay: 0.15s;
+  animation-delay: 0.2s;
 }
 
 .splash-dot:nth-child(3) {
-  animation-delay: 0.3s;
+  animation-delay: 0.4s;
 }
 
-@keyframes splashBounce {
+@keyframes dotPulse {
   0%,
   80%,
   100% {
     transform: scale(0.6);
-    opacity: 0.4;
+    opacity: 0.5;
   }
   40% {
     transform: scale(1);
@@ -155,11 +160,12 @@ body {
 }
 
 .splash-sub {
-  font-family: "Libre Baskerville", serif;
-  font-size: 11px;
+  font-family: "Noto Sans Thai", system-ui, sans-serif;
+  font-size: 12px;
   color: var(--gray);
-  letter-spacing: 1px;
-  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
 }
 
 /* atmosphere glow */
