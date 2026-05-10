@@ -45,7 +45,10 @@
       <p class="header-label">Our Journey</p>
       <h1 class="header-title">Let's Go<br /><em>Japan</em></h1>
       <p class="header-sub">8 วัน · 6 จุดหมาย · ไม่รู้ลืม</p>
-      <button id="openRouteBtn" class="route-btn" title="เปิดเส้นทางทั้งหมดใน Google Maps">🗺️ เส้นทางทั้งหมด</button>
+      <div class="btn-group">
+        <button id="openRouteBtn" class="route-btn" title="เปิดเส้นทางทั้งหมดใน Google Maps">🗺️ เส้นทางทั้งหมด</button>
+        <button id="themeToggle" class="theme-btn" title="เปลี่ยนโหมดสี">🌙</button>
+      </div>
     </div>
 
     <div class="day-list" id="dayList"></div>
@@ -84,9 +87,6 @@
       <p id="editor-server-update" class="server-update-notice" style="display:none"></p>
       <label class="modal-label">สถานที่
         <input type="text" id="editor-place" class="modal-input" />
-      </label>
-      <label class="modal-label">ลิงก์รูปภาพ
-        <input type="url" id="editor-img" class="modal-input" placeholder="https://..." />
       </label>
       <label class="modal-label">กิจกรรม (แต่ละบรรทัด = 1 กิจกรรม)
         <textarea id="editor-acts" class="modal-textarea" rows="4"></textarea>

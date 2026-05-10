@@ -21,6 +21,39 @@ function append(parent, ...children) {
 
 let DAYS = [];
 let map, markers = [], curIdx = null;
+let tileLayer = null;
+
+(function initTheme() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') document.documentElement.dataset.theme = 'dark';
+  const btn = document.getElementById('themeToggle');
+  function syncIcon() {
+    btn.textContent = document.documentElement.dataset.theme === 'dark' ? '☀️' : '🌙';
+  }
+  syncIcon();
+  btn.addEventListener('click', () => {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    if (isDark) {
+      delete document.documentElement.dataset.theme;
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.dataset.theme = 'dark';
+      localStorage.setItem('theme', 'dark');
+    }
+    syncIcon();
+    if (map) {
+      const tiles = {
+        light: { url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>' },
+        dark: { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>' },
+      };
+      const key = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+      if (tileLayer) tileLayer.remove();
+      tileLayer = L.tileLayer(tiles[key].url, {
+        maxZoom: 19, subdomains: 'abcd', attribution: tiles[key].attr,
+      }).addTo(map);
+    }
+  });
+})();
 
 function formatTimeAgo(isoString) {
   if (!isoString) return '';
@@ -48,11 +81,6 @@ function renderSidebar(days) {
     );
     if (det.travel) {
       meta.appendChild(el('span', 'travel-tag', det.travel.icon + ' ' + det.travel.time));
-    }
-    if (i > 0) {
-      const prev = days[i - 1].details;
-      const km = haversineKm(prev.lat, prev.lng, det.lat, det.lng);
-      meta.appendChild(el('span', 'distance-tag', '📍 ' + Math.round(km) + ' km'));
     }
 
     const editBtn = el('button', 'edit-day-btn', '\u270f\ufe0f');
@@ -103,29 +131,19 @@ function buildPopup(d, i) {
   const acts = el('ul', 'pop-acts');
   (det.acts || []).forEach(a => acts.appendChild(el('li', null, a)));
   pop.appendChild(acts);
-  if (det.travel) {
-    pop.appendChild(el('div', 'pop-travel',
-      det.travel.icon + ' เดินทาง ' + det.travel.time + ' จากจุดก่อนหน้า'));
-  }
-  if (i > 0) {
-    const prev = DAYS[i - 1].details;
-    const km = haversineKm(prev.lat, prev.lng, det.lat, det.lng);
-    pop.appendChild(el('div', 'pop-distance', '📐 ระยะทางตรง ' + Math.round(km) + ' km'));
-  }
-  const gmLink = el('a', 'pop-gmaps', '📍 เปิดใน Google Maps');
-  gmLink.href = 'https://www.google.com/maps?q=' + det.lat + ',' + det.lng;
-  gmLink.target = '_blank';
-  gmLink.rel = 'noopener';
-  pop.appendChild(gmLink);
   return pop;
 }
 
 function renderMap(days) {
   if (!map) {
     map = L.map('map', { zoomControl: false, attributionControl: true }).setView([36, 138.5], 7);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19, subdomains: 'abcd',
-      attribution: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+    const tiles = {
+      light: { url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>' },
+      dark: { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>' },
+    };
+    const key = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+    tileLayer = L.tileLayer(tiles[key].url, {
+      maxZoom: 19, subdomains: 'abcd', attribution: tiles[key].attr,
     }).addTo(map);
     L.control.zoom({ position: 'topright' }).addTo(map);
   }
