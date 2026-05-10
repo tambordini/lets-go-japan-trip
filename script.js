@@ -116,15 +116,29 @@ function buildPopup(d, i) {
   const det = d.details;
   const pop = el('div', 'pop');
   if (det.img) {
-    const imgWrap = el('div', 'pop-img-wrap');
+    const imgWrap = el('div', 'pop-img-wrap pop-img-loading');
     const img = el('img', 'pop-img');
-    img.src = det.img;
     img.alt = det.place;
+    img.src = det.img;
+    
+    img.onload = () => {
+      imgWrap.classList.remove('pop-img-loading');
+      img.classList.add('loaded');
+    };
+    img.onerror = () => {
+      imgWrap.classList.remove('pop-img-loading');
+      imgWrap.classList.add('pop-img-error');
+      img.style.display = 'none';
+      const fallback = el('div', 'pop-img-fallback');
+      fallback.innerHTML = '<svg viewBox="0 0 64 64" width="48" height="48"><circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" stroke-width="2" opacity="0.2"/><path d="M24 42l6-8 4 4 8-10 8 14H26l-2-10z" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/></svg>';
+      imgWrap.appendChild(fallback);
+    };
+    
     imgWrap.appendChild(img);
     pop.appendChild(imgWrap);
   } else {
     const ph = el('div', 'pop-img-placeholder');
-    ph.textContent = (det.place || '')[0] || '?';
+    ph.innerHTML = '<svg viewBox="0 0 64 64" width="48" height="48"><circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" stroke-width="2" opacity="0.2"/><path d="M24 42l6-8 4 4 8-10 8 14H26l-2-10z" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/></svg>';
     pop.appendChild(ph);
   }
   append(pop,
