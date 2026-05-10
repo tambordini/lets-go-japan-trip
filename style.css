@@ -378,10 +378,16 @@ body::before {
   opacity: 0;
   transform: translateY(8px);
   animation: revealItem 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  background: #fff;
-  border: 1px solid rgba(42, 32, 24, 0.06);
+  background: var(--warm);
+  border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(42, 32, 24, 0.03);
+}
+
+[data-theme="dark"] .day-item {
+  background: #2a2520;
+  border-color: rgba(232, 223, 200, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes revealItem {
@@ -405,8 +411,17 @@ body::before {
 }
 .day-item.active {
   border-color: var(--red);
-  background: rgba(200, 92, 58, 0.04);
+  background: rgba(200, 92, 58, 0.06);
   box-shadow: 0 2px 8px rgba(200, 92, 58, 0.1);
+}
+
+[data-theme="dark"] .day-item:hover {
+  border-color: rgba(200, 92, 58, 0.4);
+  background: #322d28;
+}
+[data-theme="dark"] .day-item.active {
+  border-color: var(--red);
+  background: rgba(200, 92, 58, 0.12);
 }
 
 /* Teardrop pin icon in sidebar */
@@ -455,8 +470,44 @@ body::before {
   font-size: 17px;
   font-weight: 600;
   color: var(--ink);
-  line-height: 1.3;
-  letter-spacing: 0.2px;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+[data-theme="dark"] .day-place {
+  color: #e8dfc8;
+}
+
+.place-name {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+[data-theme="dark"] .place-name {
+  color: #e8dfc8;
+}
+
+.place-divider {
+  color: var(--gray);
+  opacity: 0.5;
+  margin: 0 4px;
+}
+
+[data-theme="dark"] .place-divider {
+  opacity: 0.7;
+}
+
+.place-date {
+  font-weight: 500;
+  color: var(--gray);
+  font-size: 0.9em;
+}
+
+[data-theme="dark"] .place-date {
+  color: #a09585;
 }
 
 .day-detail {
@@ -465,6 +516,10 @@ body::before {
   margin-top: 4px;
   font-weight: 300;
   line-height: 1.5;
+}
+
+[data-theme="dark"] .day-detail {
+  color: #9a8f82;
 }
 
 .day-meta {
@@ -485,21 +540,47 @@ body::before {
   background: transparent;
 }
 
+[data-theme="dark"] .badge {
+  background: rgba(232, 223, 200, 0.06);
+  border-color: rgba(232, 223, 200, 0.15);
+  color: #a09585;
+}
+
 .badge.city {
   border-color: var(--red);
   color: var(--red);
+}
+[data-theme="dark"] .badge.city {
+  background: rgba(200, 92, 58, 0.15);
+  border-color: rgba(200, 92, 58, 0.4);
+  color: #e8a890;
 }
 .badge.nature {
   border-color: var(--sage);
   color: var(--sage);
 }
+[data-theme="dark"] .badge.nature {
+  background: rgba(122, 154, 112, 0.15);
+  border-color: rgba(122, 154, 112, 0.4);
+  color: #a8c4a0;
+}
 .badge.snow {
   border-color: var(--blue);
   color: var(--blue);
 }
+[data-theme="dark"] .badge.snow {
+  background: rgba(91, 127, 160, 0.15);
+  border-color: rgba(91, 127, 160, 0.4);
+  color: #9ab8d4;
+}
 .badge.fun {
   border-color: var(--purple);
   color: var(--purple);
+}
+[data-theme="dark"] .badge.fun {
+  background: rgba(168, 122, 190, 0.15);
+  border-color: rgba(168, 122, 190, 0.4);
+  color: #c4a8c8;
 }
 
 .travel-tag {
@@ -510,6 +591,11 @@ body::before {
   border-radius: 8px;
 }
 
+[data-theme="dark"] .travel-tag {
+  background: rgba(232, 223, 200, 0.06);
+  color: #9a8f82;
+}
+
 .distance-tag {
   font-size: 9.5px;
   color: var(--blue);
@@ -517,6 +603,11 @@ body::before {
   padding: 2px 6px;
   background: rgba(91, 127, 160, 0.08);
   border-radius: 8px;
+}
+
+[data-theme="dark"] .distance-tag {
+  background: rgba(91, 127, 160, 0.15);
+  color: #8aa8c8;
 }
 
 /* Footer */
@@ -1080,7 +1171,9 @@ body::before {
   padding: 1.5rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 12px 40px rgba(42, 32, 24, 0.15), 0 2px 8px rgba(42, 32, 24, 0.08);
+  box-shadow:
+    0 12px 40px rgba(42, 32, 24, 0.15),
+    0 2px 8px rgba(42, 32, 24, 0.08);
   animation: modalIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -1316,8 +1409,17 @@ body::before {
   transition: all 0.2s ease;
 }
 
+[data-theme="dark"] .day-editor {
+  background: rgba(232, 223, 200, 0.04);
+  color: #7a7068;
+}
+
 .day-item:hover .day-editor {
   opacity: 0.7;
+}
+
+[data-theme="dark"] .day-item:hover .day-editor {
+  opacity: 0.85;
 }
 
 .day-editor::before {
