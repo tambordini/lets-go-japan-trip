@@ -120,7 +120,7 @@ function buildPopup(d, i) {
     const img = el('img', 'pop-img');
     img.alt = det.place;
     img.src = det.img;
-    
+
     img.onload = () => {
       imgWrap.classList.remove('pop-img-loading');
       img.classList.add('loaded');
@@ -133,7 +133,7 @@ function buildPopup(d, i) {
       fallback.innerHTML = '<svg viewBox="0 0 64 64" width="48" height="48"><circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" stroke-width="2" opacity="0.2"/><path d="M24 42l6-8 4 4 8-10 8 14H26l-2-10z" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/></svg>';
       imgWrap.appendChild(fallback);
     };
-    
+
     imgWrap.appendChild(img);
     pop.appendChild(imgWrap);
   } else {
@@ -143,9 +143,20 @@ function buildPopup(d, i) {
   }
   append(pop,
     el('div', 'pop-label', 'Day ' + (i + 1)),
-    el('div', 'pop-title', det.place),
-    el('div', 'pop-jp', det.jp),
   );
+
+  const titleEl = el('div', 'pop-title');
+  const placeParts = det.place.split('_');
+  titleEl.appendChild(el('span', null, placeParts[0].trim()));
+  if (placeParts[1]) {
+    titleEl.appendChild(el('span', 'day-number', ' • ' + placeParts[1].trim()));
+  }
+  pop.appendChild(titleEl);
+
+  if (det.jp) {
+    append(pop, el('div', 'pop-jp', det.jp));
+  }
+
   const acts = el('ul', 'pop-acts');
   (det.acts || []).forEach(a => acts.appendChild(el('li', null, a)));
   pop.appendChild(acts);
