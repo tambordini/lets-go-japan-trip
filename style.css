@@ -965,6 +965,42 @@ body::before {
   .footer {
     display: none;
   }
+
+  /* Modal Mobile */
+  .modal-box {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .modal-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .modal-input,
+  .modal-textarea {
+    padding: 0.65rem 0.9rem;
+    font-size: 0.9rem;
+    border-radius: 10px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 1.25rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    flex: none;
+  }
 }
 
 /* Auth Overlay */
@@ -1028,83 +1064,167 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: 150;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(42, 32, 24, 0.5);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 16px;
 }
 .modal-overlay.hidden {
   display: none;
 }
 .modal-box {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 20px;
   padding: 1.5rem;
-  width: min(420px, 92vw);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 12px 40px rgba(42, 32, 24, 0.15), 0 2px 8px rgba(42, 32, 24, 0.08);
+  animation: modalIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(42, 32, 24, 0.06);
+}
+.modal-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.modal-header h3::before {
+  content: "📝";
+  font-size: 1rem;
 }
 .modal-close {
   background: none;
   border: none;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   cursor: pointer;
-  color: #888;
+  color: var(--gray);
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+.modal-close:hover {
+  background: rgba(42, 32, 24, 0.05);
+  color: var(--ink);
 }
 .modal-label {
   display: block;
-  font-size: 0.82rem;
-  color: #888;
-  margin-bottom: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--gray);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 .modal-input,
 .modal-textarea {
   display: block;
   width: 100%;
-  margin-top: 0.25rem;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 0.92rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(42, 32, 24, 0.1);
+  border-radius: 12px;
+  font-size: 0.95rem;
   box-sizing: border-box;
+  background: #faf9f7;
+  color: var(--ink);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.modal-input:focus,
+.modal-textarea:focus {
+  outline: none;
+  border-color: var(--red);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(200, 92, 58, 0.1);
+}
+.modal-input::placeholder,
+.modal-textarea::placeholder {
+  color: var(--gray);
+  opacity: 0.6;
 }
 .modal-textarea {
   resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
 }
 .modal-actions {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
+  gap: 10px;
+  margin-top: 1.5rem;
   justify-content: flex-end;
 }
 .btn-primary {
-  background: #c85c3a;
+  background: linear-gradient(135deg, var(--red) 0%, #b54d2e 100%);
   color: #fff;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
   cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(200, 92, 58, 0.3);
+}
+.btn-primary:active {
+  transform: translateY(0);
 }
 .btn-secondary {
-  background: #f5f5f5;
-  color: #555;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  background: transparent;
+  color: var(--gray);
+  border: 1px solid rgba(42, 32, 24, 0.1);
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
   cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  background: rgba(42, 32, 24, 0.03);
+  color: var(--ink);
+  border-color: rgba(42, 32, 24, 0.2);
 }
 .server-update-notice {
-  background: #fff8e1;
-  color: #b26a00;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.82rem;
-  margin-bottom: 0.75rem;
+  background: rgba(200, 92, 58, 0.08);
+  color: var(--red);
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.server-update-notice::before {
+  content: "⚠️";
+  font-size: 0.85rem;
 }
 .edit-day-btn {
   background: none;
