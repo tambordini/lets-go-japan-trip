@@ -142,14 +142,23 @@ function renderMap(days) {
   if (!map) {
     map = L.map('map', { zoomControl: false, attributionControl: true }).setView([36, 138.5], 7);
     const tiles = {
-      light: { url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>' },
-      dark: { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>' },
+      light: {
+        url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        attr: '© <a href="https://carto.com">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+      },
+      dark: {
+        url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        attr: '© <a href="https://carto.com">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+      },
     };
     const key = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
     tileLayer = L.tileLayer(tiles[key].url, {
       maxZoom: 19, subdomains: 'abcd', attribution: tiles[key].attr,
     }).addTo(map);
-    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    // Custom zoom controls with glassmorphism
+    const zoomControl = L.control.zoom({ position: 'bottomright' });
+    map.addControl(zoomControl);
   }
 
   markers.forEach(m => map.removeLayer(m));
@@ -161,26 +170,21 @@ function renderMap(days) {
   window._legLines = [];
   for (let i = 1; i < coords.length; i++) {
     const leg = L.polyline([coords[i - 1], coords[i]], {
-      color: '#C85C3A', weight: 1.5, opacity: 0.45, dashArray: '5 7',
+      color: '#c85c3a',
+      weight: 3,
+      opacity: 0.6,
+      lineCap: 'round',
+      lineJoin: 'round',
     }).addTo(map);
     window._legLines.push(leg);
   }
 
-  if (window._marchOffset === undefined) window._marchOffset = 0;
-  if (window._marchRafId) cancelAnimationFrame(window._marchRafId);
-
-  function marchAll() {
-    window._marchOffset -= 0.5;
-    (window._legLines || []).forEach(leg => {
-      const svgPath = leg.getElement();
-      if (svgPath) svgPath.style.strokeDashoffset = window._marchOffset;
+  map.once('zoomend', () => {
+    const zoom = map.getZoom();
+    window._legLines.forEach(leg => {
+      leg.setStyle({ opacity: zoom > 8 ? 0.6 : 0.3 });
     });
-    window._marchRafId = requestAnimationFrame(marchAll);
-  }
-
-  setTimeout(() => {
-    marchAll();
-  }, 500);
+  });
 
   days.forEach((d, i) => {
     const mkDiv = document.createElement('div');
