@@ -1297,10 +1297,6 @@ body::before {
   }
 
   /* Map mobile */
-  .leaflet-control-zoom {
-    right: 12px !important;
-  }
-
   .leaflet-control-zoom a {
     width: 42px !important;
     height: 42px !important;
