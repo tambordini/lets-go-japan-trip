@@ -279,55 +279,64 @@ body::before {
 }
 
 .btn-group {
-  display: inline-flex;
-  gap: 6px;
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  width: 100%;
 }
 
 .route-btn,
 .theme-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 12px;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
   background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  color: var(--gray);
-  font-size: 11px;
+  border: 1px solid rgba(200, 92, 58, 0.4);
+  border-radius: 20px;
+  color: var(--red);
+  font-size: 12px;
   font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.18s;
+  transition: all 0.25s ease;
+  height: 36px;
+  white-space: nowrap;
 }
+
 .route-btn:hover,
 .theme-btn:hover {
+  background: rgba(200, 92, 58, 0.08);
   border-color: var(--red);
-  color: var(--red);
-  background: rgba(200, 92, 58, 0.04);
+  transform: translateY(-1px);
 }
-.theme-btn {
-  padding: 6px 10px;
-  font-size: 15px;
-}
-.route-btn:hover {
-  border-color: var(--red);
-  color: var(--red);
-  background: rgba(200, 92, 58, 0.04);
+
+.route-btn {
+  flex: 1;
 }
 
 .theme-btn {
-  background: none;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 5px 10px;
-  opacity: 0.55;
-  transition: opacity 0.18s;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
+  padding: 8px 10px;
+  font-size: 15px;
+  flex: 0 0 auto;
+  border-radius: 20px;
+}
+
+.route-btn svg,
+.theme-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  flex-shrink: 0;
+}
+
+.theme-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* Day list */
@@ -347,9 +356,10 @@ body::before {
 
 .day-item {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 13px;
-  padding: 12px 22px;
+  gap: 10px;
+  padding: 14px 22px;
   cursor: pointer;
   position: relative;
   transition: background 0.18s;
@@ -365,11 +375,18 @@ body::before {
   }
 }
 
+.day-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  width: 100%;
+}
+
 .day-item::before {
   content: "";
   position: absolute;
   left: 34px;
-  top: 0;
+  top: 14px;
   width: 1px;
   height: 12px;
   background: var(--line);
@@ -859,16 +876,31 @@ body::before {
   }
 
   .btn-group {
-    gap: 4px;
+    gap: 8px;
     margin-top: 8px;
   }
   .route-btn,
   .theme-btn {
-    padding: 5px 9px;
-    font-size: 10px;
+    padding: 6px 12px;
+    font-size: 11px;
+    height: 32px;
+    border-radius: 16px;
+  }
+  .route-btn {
+    flex: 1;
   }
   .theme-btn {
     font-size: 14px;
+    padding: 6px 9px;
+    flex: 0 0 auto;
+  }
+  .route-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+  .theme-btn svg {
+    width: 14px;
+    height: 14px;
   }
 
   .header-sub {
@@ -1035,11 +1067,13 @@ body::before {
   border: none;
   cursor: pointer;
   font-size: 0.9rem;
-  padding: 0.2rem 0.4rem;
-  opacity: 0.5;
+  padding: 0.4rem 0.4rem;
+  opacity: 0.4;
+  transition: opacity 0.18s;
+  flex-shrink: 0;
 }
 .edit-day-btn:hover {
-  opacity: 1;
+  opacity: 0.8;
 }
 
 .conflict-desc {
@@ -1098,8 +1132,29 @@ body::before {
 
 /* Editor attribution stamp in sidebar */
 .day-editor {
-  display: block;
-  font-size: 0.78rem;
-  color: #9ca3af;
-  margin-top: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Libre Baskerville", serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--gray);
+  margin-top: 8px;
+  padding: 4px 8px;
+  background: rgba(42, 32, 24, 0.03);
+  border-radius: 4px;
+  letter-spacing: 0.15px;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.day-item:hover .day-editor {
+  opacity: 0.85;
+  background: rgba(42, 32, 24, 0.05);
+}
+
+.day-editor::before {
+  content: "✎";
+  font-size: 0.65rem;
+  opacity: 0.5;
 }
