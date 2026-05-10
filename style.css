@@ -340,6 +340,150 @@ body::before {
   aspect-ratio: 1;
 }
 
+/* Music Toggle Button */
+.music-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid rgba(42, 32, 24, 0.1);
+  border-radius: 50%;
+  color: var(--gray);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 0 0 36px;
+  aspect-ratio: 1;
+}
+
+.music-btn:hover {
+  background: rgba(42, 32, 24, 0.03);
+  border-color: rgba(42, 32, 24, 0.2);
+  transform: translateY(-1px);
+}
+
+.music-btn:active {
+  transform: scale(0.95);
+}
+
+.music-btn .music-icon {
+  stroke: var(--gray);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+/* Playing state - filled button with equalizer */
+.music-btn.playing {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.music-btn.playing .music-icon {
+  stroke: #fff;
+  opacity: 1;
+}
+
+.music-btn.playing .music-icon .eq-bar {
+  width: 3px;
+  background: #fff;
+  border-radius: 1px;
+  animation: eqBounce 0.8s ease-in-out infinite;
+}
+
+.music-btn.playing .music-icon .eq-bar:nth-child(1) {
+  height: 8px;
+  animation-delay: 0s;
+}
+
+.music-btn.playing .music-icon .eq-bar:nth-child(2) {
+  height: 12px;
+  animation-delay: 0.15s;
+}
+
+.music-btn.playing .music-icon .eq-bar:nth-child(3) {
+  height: 6px;
+  animation-delay: 0.3s;
+}
+
+.music-btn.playing .music-icon .eq-bar:nth-child(4) {
+  height: 10px;
+  animation-delay: 0.1s;
+}
+
+@keyframes eqBounce {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.4); }
+}
+
+/* Dark mode */
+[data-theme="dark"] .music-btn {
+  border-color: rgba(232, 223, 200, 0.1);
+}
+
+[data-theme="dark"] .music-btn:hover {
+  background: rgba(232, 223, 200, 0.03);
+  border-color: rgba(232, 223, 200, 0.2);
+}
+
+[data-theme="dark"] .music-btn .music-icon {
+  stroke: #7a7068;
+}
+
+[data-theme="dark"] .music-btn.playing {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+[data-theme="dark"] .music-btn.playing .music-icon {
+  stroke: #fff;
+}
+
+.music-btn:hover {
+  background: rgba(200, 92, 58, 0.1);
+  border-color: var(--red);
+  transform: translateY(-1px);
+}
+
+.music-btn:active {
+  transform: scale(0.95);
+}
+
+.music-btn .music-icon {
+  stroke: var(--red);
+  transition: all 0.2s ease;
+}
+
+/* Playing state - pulse animation */
+.music-btn.playing {
+  background: rgba(200, 92, 58, 0.1);
+  border-color: var(--red);
+}
+
+.music-btn.playing .music-icon {
+  animation: musicPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+}
+
+/* Dark mode */
+[data-theme="dark"] .music-btn {
+  border-color: rgba(200, 92, 58, 0.5);
+}
+
+[data-theme="dark"] .music-btn .music-icon {
+  stroke: #e8a890;
+}
+
 .route-btn svg,
 .theme-btn svg {
   width: 14px;

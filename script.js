@@ -57,6 +57,47 @@ let tileLayer = null;
   });
 })();
 
+// Music Toggle
+(function initMusic() {
+  const audio = document.getElementById('lofi-audio');
+  const btn = document.getElementById('musicToggle');
+  
+  audio.volume = 0.15;
+  
+  // Muted/Off icon - music note with slash
+  const musicOffIcon = '<svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>';
+  
+  // Playing/On icon - equalizer bars
+  const musicOnIcon = '<div class="music-icon" style="display:flex;gap:2px;align-items:flex-end;justify-content:center;"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></div>';
+  
+  btn.innerHTML = musicOffIcon;
+  
+  btn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().then(() => {
+        btn.classList.add('playing');
+        btn.innerHTML = musicOnIcon;
+        localStorage.setItem('musicPlaying', 'true');
+      }).catch(err => {
+        console.log('Autoplay blocked, user interaction required');
+      });
+    } else {
+      audio.pause();
+      btn.classList.remove('playing');
+      btn.innerHTML = musicOffIcon;
+      localStorage.setItem('musicPlaying', 'false');
+    }
+  });
+  
+  // Restore music state
+  if (localStorage.getItem('musicPlaying') === 'true') {
+    audio.play().then(() => {
+      btn.classList.add('playing');
+      btn.innerHTML = musicOnIcon;
+    }).catch(() => {});
+  }
+})();
+
 function formatTimeAgo(isoString) {
   if (!isoString) return '';
   const diffSec = Math.floor((Date.now() - new Date(isoString)) / 1000);
