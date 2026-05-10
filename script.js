@@ -157,7 +157,7 @@ function renderMap(days) {
     }).addTo(map);
 
     // Custom zoom controls with glassmorphism
-    const zoomControl = L.control.zoom({ position: 'bottomright' });
+    const zoomControl = L.control.zoom({ position: 'topright' });
     map.addControl(zoomControl);
   }
 

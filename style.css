@@ -1149,7 +1149,6 @@ body::before {
 
   /* Map mobile */
   .leaflet-control-zoom {
-    bottom: 20px !important;
     right: 12px !important;
   }
 
