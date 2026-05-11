@@ -131,7 +131,9 @@ function renderSidebar(days) {
     editBtn.title = 'แก้ไขแผนวันนี้';
     editBtn.addEventListener('click', (e) => { e.stopPropagation(); openEditor(d); });
 
-    append(info, el('div', 'day-place', det.place), el('div', 'day-detail', (det.acts || [])[0] || ''), meta);
+    const dayPlace = el('div', 'day-place');
+    dayPlace.appendChild(el('span', 'place-name', det.place));
+    append(info, dayPlace, el('div', 'day-detail', (det.acts || [])[0] || ''), meta);
     append(rowTop, pin, info, editBtn);
     append(item, rowTop);
     item.addEventListener('click', () => goTo(i));
