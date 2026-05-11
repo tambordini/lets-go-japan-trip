@@ -815,6 +815,11 @@ body::before {
   z-index: 1;
 }
 
+/* Warm filter for map tiles - vintage sepia tone */
+.leaflet-tile {
+  filter: sepia(8%) hue-rotate(5deg) brightness(98%) contrast(96%);
+}
+
 /* ─── Leaflet popup overrides ─── */
 .leaflet-popup-content-wrapper {
   background: var(--warm) !important;

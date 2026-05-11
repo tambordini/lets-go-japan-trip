@@ -45,8 +45,8 @@ let tileLayer = null;
     syncIcon();
     if (map) {
       const tiles = {
-        light: { url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>' },
-        dark: { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com">CARTO</a> \u00a9 <a href="https://www.openstreetmap.org/copyright">OSM</a>' },
+        light: { url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com/">CARTO</a> \u00a9 <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>' },
+        dark: { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', attr: '\u00a9 <a href="https://carto.com/">CARTO</a> \u00a9 <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>' },
       };
       const key = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
       if (tileLayer) tileLayer.remove();
@@ -210,11 +210,11 @@ function renderMap(days) {
     const tiles = {
       light: {
         url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-        attr: '© <a href="https://carto.com">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+        attr: '© <a href="https://carto.com/">CARTO</a> © <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
       },
       dark: {
         url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        attr: '© <a href="https://carto.com">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+        attr: '© <a href="https://carto.com/">CARTO</a> © <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
       },
     };
     const key = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
