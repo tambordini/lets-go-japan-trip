@@ -107,6 +107,50 @@ function formatTimeAgo(isoString) {
   return Math.floor(diffSec / 86400) + ' วันที่แล้ว';
 }
 
+function initStatsWidget() {
+  if (!window.TRIP_DEPARTURE_DATE) return;
+
+  const widget = document.getElementById('stats-widget');
+  const pillValue = document.getElementById('stats-pill-value');
+  const daysEl = document.getElementById('stats-days');
+  const hoursEl = document.getElementById('stats-hours');
+  const minutesEl = document.getElementById('stats-minutes');
+  const secondsEl = document.getElementById('stats-seconds');
+
+  function updateCountdown() {
+    const now = Date.now();
+    const departure = new Date(window.TRIP_DEPARTURE_DATE).getTime();
+    const diff = departure - now;
+
+    if (diff < 0) {
+      // After departure - show negative or hide
+      widget.classList.add('hidden');
+      return;
+    }
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const formatted = `${days}d ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    pillValue.textContent = formatted;
+
+    daysEl.textContent = days;
+    hoursEl.textContent = String(hours).padStart(2, '0');
+    minutesEl.textContent = String(minutes).padStart(2, '0');
+    secondsEl.textContent = String(seconds).padStart(2, '0');
+  }
+
+  // Initial update
+  updateCountdown();
+  widget.classList.remove('hidden');
+
+  // Update every 1 second
+  setInterval(updateCountdown, 1000);
+}
+
 function renderSidebar(days) {
   const listEl = document.getElementById('dayList');
   listEl.textContent = '';
