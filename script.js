@@ -117,13 +117,22 @@ function initStatsWidget() {
   const minutesEl = document.getElementById('stats-minutes');
   const secondsEl = document.getElementById('stats-seconds');
 
+  // Guard: check all elements exist
+  if (!widget || !pillValue || !daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
   function updateCountdown() {
     const now = Date.now();
     const departure = new Date(window.TRIP_DEPARTURE_DATE).getTime();
+
+    // Guard: invalid date format
+    if (isNaN(departure)) {
+      widget.classList.add('hidden');
+      return;
+    }
+
     const diff = departure - now;
 
     if (diff < 0) {
-      // After departure - show negative or hide
       widget.classList.add('hidden');
       return;
     }
