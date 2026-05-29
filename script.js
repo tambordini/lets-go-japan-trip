@@ -428,6 +428,10 @@ async function initApp() {
 }
 
 (async () => {
-  await initApp();
-  initStatsWidget();
+  try {
+    await initApp();
+    initStatsWidget();
+  } catch (err) {
+    console.error('Failed to initialize app:', err);
+  }
 })();
