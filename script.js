@@ -154,10 +154,12 @@ function initStatsWidget() {
 
   // Initial update
   updateCountdown();
-  widget.classList.remove('hidden');
 
-  // Update every 1 second
-  setInterval(updateCountdown, 1000);
+  // Only show widget if date is valid (updateCountdown() hid it if invalid)
+  if (!widget.classList.contains('hidden')) {
+    // Update every 1 second
+    setInterval(updateCountdown, 1000);
+  }
 }
 
 function renderSidebar(days) {
