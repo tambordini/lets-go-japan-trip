@@ -430,8 +430,14 @@ async function initApp() {
 (async () => {
   try {
     await initApp();
-    initStatsWidget();
   } catch (err) {
     console.error('Failed to initialize app:', err);
+  }
+
+  // Widget is non-critical; initialize separately so failures don't block app
+  try {
+    initStatsWidget();
+  } catch (err) {
+    console.warn('Failed to initialize countdown widget:', err);
   }
 })();
