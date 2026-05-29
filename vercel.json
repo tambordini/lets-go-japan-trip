@@ -1,4 +1,4 @@
 {
-  "buildCommand": "echo \"window.SUPABASE_URL='$SUPABASE_URL'; window.SUPABASE_ANON_KEY='$SUPABASE_ANON_KEY'; window.TRIP_ITINERARY_ID='$TRIP_ITINERARY_ID';\" > config.js",
+  "buildCommand": "echo \"window.SUPABASE_URL='$SUPABASE_URL'; window.SUPABASE_ANON_KEY='$SUPABASE_ANON_KEY'; window.TRIP_ITINERARY_ID='$TRIP_ITINERARY_ID'; window.TRIP_DEPARTURE_DATE='$TRIP_DEPARTURE_DATE';\" > config.js",
   "outputDirectory": "."
 }
