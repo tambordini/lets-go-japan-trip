@@ -20,8 +20,10 @@ function append(parent, ...children) {
 }
 
 let DAYS = [];
+let places = [], placeMarkers = [], isDetailMode = false;
 let map, markers = [], curIdx = null;
 let tileLayer = null;
+let detailDayIndex = null, detailBackBtn = null;
 
 (function initTheme() {
   const saved = localStorage.getItem('theme');
@@ -261,6 +263,16 @@ function buildPopup(d, i) {
   const acts = el('ul', 'pop-acts');
   (det.acts || []).forEach(a => acts.appendChild(el('li', null, a)));
   pop.appendChild(acts);
+
+  // Detail button
+  const detailBtn = el('button', 'pop-btn detail-btn', '📋 รายละเอียด');
+  detailBtn.style.cssText = 'display:block;width:100%;margin-top:0.6rem;padding:0.4rem 0;border:1px solid var(--red);border-radius:6px;background:var(--red);color:#fff;cursor:pointer;font-family:inherit;font-size:0.8rem;text-align:center;';
+  detailBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    map.closePopup();
+    enterDetail(i);
+  });
+  pop.appendChild(detailBtn);
   return pop;
 }
 
@@ -350,6 +362,7 @@ function renderMap(days) {
 }
 
 function setActive(i) {
+  if (isDetailMode) return;
   if (!DAYS[i]) return;
   document.querySelectorAll('.day-item').forEach(e => e.classList.remove('active'));
   const activeItem = document.querySelectorAll('.day-item')[i];
@@ -405,12 +418,218 @@ setInterval(spawnPetal, 950);
   window._closeMobileDrawer = closeDrawer;
 })();
 
+// ─── Day Detail Functions ──────────────────────────
+
+async function enterDetail(i) {
+  const day = DAYS[i];
+  if (!day) return;
+  isDetailMode = true;
+  detailDayIndex = i;
+
+  // Hide day markers, show place markers
+  markers.forEach(m => { if (map.hasLayer(m)) map.removeLayer(m); });
+  (window._legLines || []).forEach(l => map.removeLayer(l));
+
+  // Load places
+  places = await loadDayPlaces(day.id);
+
+  // Transform sidebar
+  const headerActions = document.querySelector('.btn-group');
+  detailBackBtn = el('button', 'detail-back-btn', '◀ กลับ Overview');
+  detailBackBtn.addEventListener('click', exitDetail);
+  headerActions.parentNode.insertBefore(detailBackBtn, headerActions);
+
+  const listEl = document.getElementById('dayList');
+  listEl.textContent = '';
+  listEl.classList.remove('day-list');
+  listEl.classList.add('day-place-list');
+  renderDayDetail(day);
+
+  // Scope map
+  renderPlaceMap(day);
+
+  // Mobile auto-expand
+  if (window.innerWidth <= 640) {
+    document.querySelector('.sidebar').classList.add('open');
+    document.getElementById('sidebar-backdrop')?.classList.add('active');
+  }
+}
+
+function exitDetail() {
+  isDetailMode = false;
+  detailDayIndex = null;
+  places = [];
+
+  // Clean up place markers
+  placeMarkers.forEach(m => map.removeLayer(m));
+  placeMarkers = [];
+
+  // Restore day markers
+  markers.forEach(m => m.addTo(map));
+
+  // Restore polyline legs
+  (window._legLines || []).forEach(l => l.addTo(map));
+
+  // Restore sidebar
+  const listEl = document.getElementById('dayList');
+  listEl.classList.remove('day-place-list');
+  listEl.classList.add('day-list');
+
+  if (detailBackBtn) { detailBackBtn.remove(); detailBackBtn = null; }
+
+  renderSidebar(DAYS);
+
+  // Restore map bounds
+  const coords = DAYS.map(d => [d.details.lat, d.details.lng]);
+  if (coords.length) {
+    map.fitBounds(L.latLngBounds(coords), { padding: [40, 60] });
+  }
+}
+
+function renderDayDetail(day) {
+  const listEl = document.getElementById('dayList');
+  listEl.textContent = '';
+
+  if (!places.length) {
+    const empty = el('div', 'place-empty',
+      'ยังไม่มีสถานที่ในวันนี้\nคลิก "+ Add Place" เพิ่มเลย!'
+    );
+    listEl.appendChild(empty);
+  } else {
+    places.forEach((p, idx) => {
+      const card = el('div', 'place-card');
+      card.dataset.placeId = p.id;
+      card.style.animationDelay = (idx * 0.05 + 0.1) + 's';
+
+      const row = el('div', 'place-card-row');
+      const pin = el('div', 'place-pin', String(idx + 1));
+      const body = el('div', 'place-card-body');
+      body.appendChild(el('div', 'place-card-name', p.name));
+
+      if (p.acts && p.acts.length) {
+        body.appendChild(el('div', 'place-card-acts', p.acts.join(' · ')));
+      }
+
+      const meta = el('div', 'place-card-meta');
+      if (p.expense > 0) {
+        meta.appendChild(el('span', 'place-card-expense', '¥' + Number(p.expense).toLocaleString()));
+      }
+      if (p.split_among && p.split_among.length && window.members) {
+        const names = p.split_among
+          .map(uid => window.members.find(m => m.id === uid))
+          .filter(Boolean)
+          .map(m => m.name)
+          .join(', ');
+        if (names) meta.appendChild(el('span', 'place-card-split', '👥 ' + names));
+      }
+
+      body.appendChild(meta);
+
+      // Card actions
+      const actions = el('div', 'place-card-actions');
+      const editBtn = el('button', 'place-edit-btn', '✏️ แก้ไข');
+      editBtn.addEventListener('click', (e) => { e.stopPropagation(); openPlaceEditor(day, p); });
+      const delBtn = el('button', 'place-del-btn', '✖ ลบ');
+      delBtn.addEventListener('click', (e) => { e.stopPropagation(); deletePlaceHandler(p); });
+      append(actions, editBtn, delBtn);
+      body.appendChild(actions);
+      append(row, pin, body);
+
+      const focusBtn = el('button', 'place-card-focus', '🗺️');
+      focusBtn.title = 'ดูบนแผนที่';
+      focusBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (p.lat && p.lng) focusPlace(idx);
+      });
+      append(row, focusBtn);
+      append(card, row);
+
+      card.addEventListener('click', () => { if (p.lat && p.lng) focusPlace(idx); });
+      listEl.appendChild(card);
+    });
+  }
+
+  // Add place button
+  const addBtn = el('button', 'add-place-btn', '+ Add Place');
+  addBtn.addEventListener('click', () => openPlaceEditor(day, null));
+  listEl.appendChild(addBtn);
+}
+
+function renderPlaceMap(day) {
+  placeMarkers.forEach(m => map.removeLayer(m));
+  placeMarkers = [];
+
+  const validPlaces = places.filter(p => p.lat && p.lng);
+  if (!validPlaces.length) {
+    // If no places with coords, just show day's main location
+    map.flyTo([day.details.lat, day.details.lng], 12, { duration: 0.8 });
+    return;
+  }
+
+  const coords = validPlaces.map(p => [p.lat, p.lng]);
+
+  // Polyline between places — direct connections by sort_index
+  for (let i = 1; i < validPlaces.length; i++) {
+    L.polyline([coords[i - 1], coords[i]], {
+      color: '#5b7fa0', weight: 2, opacity: 0.5,
+      lineCap: 'round', lineJoin: 'round', dashArray: '4 6',
+    }).addTo(map);
+  }
+
+  // Markers
+  validPlaces.forEach((p, idx) => {
+    const mkDiv = document.createElement('div');
+    mkDiv.className = 'mk';
+    mkDiv.id = 'pmk' + p.id;
+    const mkSpan = document.createElement('span');
+    mkSpan.className = 'mn';
+    mkSpan.textContent = String(idx + 1);
+    mkDiv.appendChild(mkSpan);
+
+    const icon = L.divIcon({
+      className: '',
+      html: mkDiv.outerHTML,
+      iconSize: [34, 42], iconAnchor: [17, 41], popupAnchor: [0, -44],
+    });
+
+    const m = L.marker([p.lat, p.lng], { icon }).addTo(map);
+    m.bindPopup(p.name, { maxWidth: 200 });
+    m.on('click', () => focusPlace(idx));
+    placeMarkers.push(m);
+  });
+
+  map.fitBounds(L.latLngBounds(coords), { padding: [50, 60], maxZoom: 15 });
+}
+
+function focusPlace(idx) {
+  const p = places[idx];
+  if (!p || !p.lat || !p.lng) return;
+  map.flyTo([p.lat, p.lng], 15, { duration: 0.6 });
+  map.once('moveend', () => {
+    if (placeMarkers[idx]) placeMarkers[idx].openPopup();
+  });
+  // Highlight card
+  document.querySelectorAll('.place-card').forEach(c => c.classList.remove('active'));
+  const cards = document.querySelectorAll('.place-card');
+  if (cards[idx]) cards[idx].classList.add('active');
+}
+
+async function deletePlaceHandler(p) {
+  if (!confirm('ลบ ' + p.name + '? แน่ใจ?')) return;
+  await deletePlace(p.id);
+  // Refresh detail
+  places = await loadDayPlaces(DAYS[detailDayIndex].id);
+  renderDayDetail(DAYS[detailDayIndex]);
+  renderPlaceMap(DAYS[detailDayIndex]);
+}
+
 async function initApp() {
   await ensureMemberSelected();
   DAYS = await loadDays();
   renderSidebar(DAYS);
   renderMap(DAYS);
   initRealtime();
+  if (typeof initPlaceRealtime === 'function') initPlaceRealtime();
 
   document.getElementById('openRouteBtn').addEventListener('click', () => {
     if (DAYS.length < 2) return;
