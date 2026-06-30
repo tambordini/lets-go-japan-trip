@@ -11,7 +11,7 @@ async function addPlace(dayId, data) {
   const { data: row, error } = await db.rpc('add_day_place', {
     p_day_id: dayId,
     p_name: data.name,
-    p_acts: JSON.stringify(data.acts || []),
+    p_acts: data.acts || [],
     p_expense: data.expense || 0,
     p_split_among: data.split_among || [],
     p_lat: data.lat || null,
@@ -25,7 +25,7 @@ async function updatePlace(id, data) {
   const { data: row, error } = await db.rpc('update_day_place', {
     p_id: id,
     p_name: data.name,
-    p_acts: JSON.stringify(data.acts || []),
+    p_acts: data.acts || [],
     p_expense: data.expense || 0,
     p_split_among: data.split_among || [],
     p_lat: data.lat || null,

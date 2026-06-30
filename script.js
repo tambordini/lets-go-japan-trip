@@ -507,7 +507,8 @@ function renderDayDetail(day) {
       body.appendChild(el('div', 'place-card-name', p.name));
 
       if (p.acts && p.acts.length) {
-        body.appendChild(el('div', 'place-card-acts', p.acts.join(' · ')));
+        const actsArr = Array.isArray(p.acts) ? p.acts : (typeof p.acts === 'string' ? JSON.parse(p.acts) : []);
+        if (actsArr.length) body.appendChild(el('div', 'place-card-acts', actsArr.join(' · ')));
       }
 
       const meta = el('div', 'place-card-meta');
