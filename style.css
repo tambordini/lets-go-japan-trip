@@ -2218,11 +2218,6 @@ body::before {
 .coord-row .modal-input {
   flex: 1;
 }
-.coord-fields {
-  display: flex;
-  gap: 0.4rem;
-  margin-top: 0.3rem;
-}
 .modal-input-sm {
   width: 50%;
   font-size: 0.75rem;

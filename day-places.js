@@ -40,19 +40,20 @@ async function deletePlace(id) {
   if (error) throw error;
 }
 
-// Photon geocoding — free, no API key
+// Nominatim geocoding — free, no API key, better Japan coverage
 async function searchPlaceName(query) {
-  if (!query || query.trim().length < 2) return [];
-  const url = 'https://photon.komoot.io/api/?q=' + encodeURIComponent(query) + '&limit=5&lang=ja';
+  const q = (query || '').trim();
+  if (q.length < 2) return [];
+  const url = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(q) + '&limit=5&format=json';
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { headers: { 'User-Agent': 'LetsGoJapanTrip/1.0' } });
     if (!res.ok) return [];
-    const geo = await res.json();
-    return (geo.features || []).map(f => ({
-      name: f.properties.name || '',
-      label: f.properties.name + (f.properties.city ? ', ' + f.properties.city : '') + (f.properties.country ? ', ' + f.properties.country : ''),
-      lat: f.geometry.coordinates[1],
-      lng: f.geometry.coordinates[0],
+    const data = await res.json();
+    return (data || []).map(f => ({
+      name: f.display_name.split(',')[0],
+      label: f.display_name,
+      lat: parseFloat(f.lat),
+      lng: parseFloat(f.lon),
     }));
   } catch {
     return [];

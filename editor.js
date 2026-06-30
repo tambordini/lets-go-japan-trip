@@ -59,6 +59,8 @@ document.getElementById('editor-close').addEventListener('click', closeEditor);
 // ─── Place Editor ─────────────────────────────────
 let _editingPlace = null;
 let _editingPlaceDay = null;
+let _pendingLat = null;
+let _pendingLng = null;
 let _placePickMode = false;
 
 function openPlaceEditor(day, place) {
@@ -68,10 +70,11 @@ function openPlaceEditor(day, place) {
   const isNew = !place;
   document.getElementById('place-editor-title').textContent = isNew ? 'เพิ่มสถานที่' : 'แก้ไขสถานที่';
   document.getElementById('place-editor-name').value = place ? (place.name || '') : '';
-  document.getElementById('place-editor-acts').value = place && place.acts ? place.acts.join('\n') : '';
+  const actsArr = place && place.acts ? (Array.isArray(place.acts) ? place.acts : JSON.parse(place.acts)) : [];
+  document.getElementById('place-editor-acts').value = actsArr.join('\n');
   document.getElementById('place-editor-expense').value = place ? (place.expense || 0) : 0;
-  document.getElementById('place-editor-lat').value = place ? (place.lat || '') : '';
-  document.getElementById('place-editor-lng').value = place ? (place.lng || '') : '';
+  _pendingLat = place ? (place.lat || null) : null;
+  _pendingLng = place ? (place.lng || null) : null;
   document.getElementById('place-editor-search').value = '';
   document.getElementById('place-editor-results').classList.add('hidden');
   document.getElementById('place-editor-results').textContent = '';
@@ -105,6 +108,8 @@ function renderSplitCheckboxes(place) {
 function closePlaceEditor() {
   _editingPlace = null;
   _editingPlaceDay = null;
+  _pendingLat = null;
+  _pendingLng = null;
   _placePickMode = false;
   document.getElementById('place-editor-modal').classList.add('hidden');
   if (map) map.off('click', placePickHandler);
@@ -117,8 +122,8 @@ async function savePlaceEditor() {
   const acts = document.getElementById('place-editor-acts').value
     .split('\n').map(s => s.trim()).filter(Boolean);
   const expense = parseFloat(document.getElementById('place-editor-expense').value) || 0;
-  const lat = parseFloat(document.getElementById('place-editor-lat').value) || null;
-  const lng = parseFloat(document.getElementById('place-editor-lng').value) || null;
+  const lat = _pendingLat;
+  const lng = _pendingLng;
 
   const splitCheckboxes = document.querySelectorAll('#place-editor-split input[type="checkbox"]:checked');
   const split_among = Array.from(splitCheckboxes).map(cb => cb.value);
@@ -155,8 +160,8 @@ async function searchPlaceHandler() {
     results.forEach(r => {
       const item = el('div', 'search-result-item', r.label);
       item.addEventListener('click', () => {
-        document.getElementById('place-editor-lat').value = r.lat;
-        document.getElementById('place-editor-lng').value = r.lng;
+        _pendingLat = r.lat;
+        _pendingLng = r.lng;
         document.getElementById('place-editor-name').value = r.name;
         container.classList.add('hidden');
       });
@@ -174,8 +179,8 @@ function enablePlacePickMode() {
 }
 
 function placePickHandler(e) {
-  document.getElementById('place-editor-lat').value = e.latlng.lat.toFixed(5);
-  document.getElementById('place-editor-lng').value = e.latlng.lng.toFixed(5);
+  _pendingLat = e.latlng.lat;
+  _pendingLng = e.latlng.lng;
   document.getElementById('place-editor-search').placeholder = 'ค้นหาชื่อสถานที่...';
 }
 
@@ -188,5 +193,4 @@ document.getElementById('place-editor-search').addEventListener('keydown', (e) =
   if (e.key === 'Enter') { e.preventDefault(); searchPlaceHandler(); }
 });
 
-// Pick coordinates from map — click on the hint text
-document.querySelector('.coord-hint')?.addEventListener('click', enablePlacePickMode);
+// Map click pick is triggered via the search input hint

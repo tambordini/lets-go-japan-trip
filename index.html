@@ -1,227 +1,299 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Let's Go Japan ✈</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="apple-touch-icon" href="favicon.svg" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+Thai:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Let's Go Japan ✈</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="apple-touch-icon" href="favicon.svg" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+Thai:wght@300;400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
-    rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="style.css" />
-</head>
-
-<body>
-
-  <div id="splash">
-    <div class="splash-inner">
-      <div class="splash-stamp">
-        <span class="splash-stamp-top">TRIP</span>
-        <span class="splash-stamp-jp">日本</span>
-        <span class="splash-stamp-year">2026</span>
-      </div>
-      <h1 class="splash-title">Let's Go<br /><em>Japan</em></h1>
-      <div class="splash-loader">
-        <div class="splash-dot"></div>
-        <div class="splash-dot"></div>
-        <div class="splash-dot"></div>
-      </div>
-      <p class="splash-sub">กำลังโหลดแผนการเดินทาง...</p>
-    </div>
-  </div>
-
-  <div id="petals"></div>
-
-  <aside class="sidebar">
-    <div class="header">
-      <div class="stamp">
-        <span class="stamp-top">TRIP</span>
-        <span class="stamp-jp">日本</span>
-        <span class="stamp-year">2026</span>
-      </div>
-      <p class="header-label">Our Journey</p>
-      <h1 class="header-title">Let's Go<br /><em>Japan</em></h1>
-      <p class="header-sub">8 วัน · 6 จุดหมาย · ไม่รู้ลืม</p>
-      <div class="btn-group">
-        <button id="openRouteBtn" class="route-btn">
-          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 11l19-9-9 19-2-8-8-2z" />
-          </svg>
-          เส้นทางทั้งหมด
-        </button>
-        <button id="musicToggle" class="music-btn" title="เปิดเพลง Lofi">
-          <svg class="music-icon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13" />
-            <circle cx="6" cy="18" r="3" />
-            <circle cx="18" cy="16" r="3" />
-          </svg>
-        </button>
-        <button id="themeToggle" class="theme-btn" title="เปลี่ยนโหมดสี">
-          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="day-list" id="dayList"></div>
-
-    <div class="footer">
-      <p class="footer-hint">คลิก pin บนแผนที่ หรือรายการด้านบน</p>
-      <div class="legend">
-        <div class="leg">
-          <div class="leg-dot"></div><span>จุดหมาย</span>
+  <body>
+    <div id="splash">
+      <div class="splash-inner">
+        <div class="splash-stamp">
+          <span class="splash-stamp-top">TRIP</span>
+          <span class="splash-stamp-jp">日本</span>
+          <span class="splash-stamp-year">2026</span>
         </div>
-        <div class="leg">
-          <div class="leg-line"></div><span>เส้นทาง</span>
+        <h1 class="splash-title">Let's Go<br /><em>Japan</em></h1>
+        <div class="splash-loader">
+          <div class="splash-dot"></div>
+          <div class="splash-dot"></div>
+          <div class="splash-dot"></div>
         </div>
+        <p class="splash-sub">กำลังโหลดแผนการเดินทาง...</p>
       </div>
     </div>
-  </aside>
 
-  <div id="map"></div>
+    <div id="petals"></div>
 
-  <div id="selection-modal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3>คุณคือใคร?</h3>
-      </div>
-      <p style="margin: 0 0 1rem; color: #666; font-size: 0.9rem;">เลือกชื่อของคุณเพื่อเริ่มใช้งาน</p>
-      <div id="selection-list" class="selection-buttons"></div>
-    </div>
-  </div>
-
-  <div id="editor-modal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="editor-title">แก้ไขแผน</h3>
-        <button id="editor-close" class="modal-close">&#x2715;</button>
-      </div>
-      <p id="editor-server-update" class="server-update-notice" style="display:none"></p>
-      <label class="modal-label">สถานที่
-        <input type="text" id="editor-place" class="modal-input" />
-      </label>
-      <label class="modal-label">กิจกรรม (แต่ละบรรทัด = 1 กิจกรรม)
-        <textarea id="editor-acts" class="modal-textarea" rows="4"></textarea>
-      </label>
-      <div class="modal-actions">
-        <button id="editor-save" class="btn-primary">บันทึก</button>
-        <button id="editor-cancel" class="btn-secondary">ยกเลิก</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="conflict-modal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3>&#x26A0;&#xFE0F; ข้อมูลถูกแก้โดยคนอื่น</h3>
-        <button id="conflict-close" class="modal-close">&#x2715;</button>
-      </div>
-      <p class="conflict-desc">ข้อมูลใน server เปลี่ยนไปแล้วขณะที่คุณกำลังแก้</p>
-      <div class="conflict-compare">
-        <div class="conflict-col">
-          <div class="conflict-col-label">ของคุณ</div>
-          <pre id="conflict-mine" class="conflict-pre"></pre>
+    <aside class="sidebar">
+      <div class="header">
+        <div class="stamp">
+          <span class="stamp-top">TRIP</span>
+          <span class="stamp-jp">日本</span>
+          <span class="stamp-year">2026</span>
         </div>
-        <div class="conflict-col">
-          <div class="conflict-col-label">ล่าสุดใน server</div>
-          <pre id="conflict-server" class="conflict-pre"></pre>
+        <p class="header-label">Our Journey</p>
+        <h1 class="header-title">Let's Go<br /><em>Japan</em></h1>
+        <p class="header-sub">8 วัน · 6 จุดหมาย · ไม่รู้ลืม</p>
+        <div class="btn-group">
+          <button id="openRouteBtn" class="route-btn">
+            <svg
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              stroke="currentColor"
+              fill="none"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 11l19-9-9 19-2-8-8-2z" />
+            </svg>
+            เส้นทางทั้งหมด
+          </button>
+          <button id="musicToggle" class="music-btn" title="เปิดเพลง Lofi">
+            <svg
+              class="music-icon"
+              viewBox="0 0 24 24"
+              width="15"
+              height="15"
+              stroke="currentColor"
+              fill="none"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+          </button>
+          <button id="themeToggle" class="theme-btn" title="เปลี่ยนโหมดสี">
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              stroke="currentColor"
+              fill="none"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </button>
         </div>
       </div>
-      <div class="modal-actions">
-        <button id="conflict-overwrite" class="btn-primary">บันทึกของฉัน (เขียนทับ)</button>
-        <button id="conflict-discard" class="btn-secondary">ใช้ของ server</button>
-      </div>
-    </div>
-  </div>
 
-  <div id="place-editor-modal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="place-editor-title">เพิ่มสถานที่</h3>
-        <button id="place-editor-close" class="modal-close">&#x2715;</button>
-      </div>
-      <label class="modal-label">ชื่อสถานที่
-        <input type="text" id="place-editor-name" class="modal-input" />
-      </label>
-      <label class="modal-label">กิจกรรม (แต่ละบรรทัด = 1 กิจกรรม)
-        <textarea id="place-editor-acts" class="modal-textarea" rows="3"></textarea>
-      </label>
-      <label class="modal-label">💰 ค่าใช้จ่าย (¥)
-        <input type="number" id="place-editor-expense" class="modal-input" value="0" min="0" />
-      </label>
-      <label class="modal-label">👥 หารโดย
-        <div id="place-editor-split" class="split-checkboxes"></div>
-      </label>
-      <label class="modal-label">📍 พิกัด
-        <div class="coord-row">
-          <input type="text" id="place-editor-search" class="modal-input" placeholder="ค้นหาชื่อสถานที่..." />
-          <button id="place-editor-search-btn" class="btn-secondary btn-sm" type="button">🔍</button>
+      <div class="day-list" id="dayList"></div>
+
+      <div class="footer">
+        <p class="footer-hint">คลิก pin บนแผนที่ หรือรายการด้านบน</p>
+        <div class="legend">
+          <div class="leg">
+            <div class="leg-dot"></div>
+            <span>จุดหมาย</span>
+          </div>
+          <div class="leg">
+            <div class="leg-line"></div>
+            <span>เส้นทาง</span>
+          </div>
         </div>
-        <div id="place-editor-results" class="search-results hidden"></div>
-        <p class="coord-hint" style="cursor:pointer;text-decoration:underline;text-decoration-style:dashed;">
-          หรือคลิกที่ตำแหน่งบนแผนที่เพื่อเลือกพิกัด
+      </div>
+    </aside>
+
+    <div id="map"></div>
+
+    <div id="selection-modal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3>คุณคือใคร?</h3>
+        </div>
+        <p style="margin: 0 0 1rem; color: #666; font-size: 0.9rem">
+          เลือกชื่อของคุณเพื่อเริ่มใช้งาน
         </p>
-        <div class="coord-fields">
-          <input type="text" id="place-editor-lat" class="modal-input modal-input-sm" placeholder="ละติจูด" readonly />
-          <input type="text" id="place-editor-lng" class="modal-input modal-input-sm" placeholder="ลองจิจูด" readonly />
+        <div id="selection-list" class="selection-buttons"></div>
+      </div>
+    </div>
+
+    <div id="editor-modal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 id="editor-title">แก้ไขแผน</h3>
+          <button id="editor-close" class="modal-close">&#x2715;</button>
         </div>
-      </label>
-      <div class="modal-actions">
-        <button id="place-editor-save" class="btn-primary">บันทึก</button>
-        <button id="place-editor-cancel" class="btn-secondary">ยกเลิก</button>
+        <p
+          id="editor-server-update"
+          class="server-update-notice"
+          style="display: none"
+        ></p>
+        <label class="modal-label"
+          >สถานที่
+          <input type="text" id="editor-place" class="modal-input" />
+        </label>
+        <label class="modal-label"
+          >กิจกรรม (แต่ละบรรทัด = 1 กิจกรรม)
+          <textarea id="editor-acts" class="modal-textarea" rows="4"></textarea>
+        </label>
+        <div class="modal-actions">
+          <button id="editor-save" class="btn-primary">บันทึก</button>
+          <button id="editor-cancel" class="btn-secondary">ยกเลิก</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Lofi Background Music -->
-  <!-- Replace src with your preferred lofi track from Pixabay or similar -->
-  <audio id="lofi-audio" loop preload="auto">
-    <source src="./bg-lofi.mp3" type="audio/mpeg">
-  </audio>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="config.js"></script>
-  <script src="db.js"></script>
-  <script src="day-places.js"></script>
-  <script src="selection.js"></script>
-  <script src="realtime.js"></script>
-  <script src="editor.js"></script>
-  <script src="conflict.js"></script>
-  <script src="script.js"></script>
-
-  <div id="stats-widget" class="stats-widget hidden">
-    <div class="stats-pill">
-      <span class="stats-pill-text">✈️ <span id="stats-pill-value">--</span></span>
-    </div>
-    <div class="stats-expanded">
-      <div class="stats-row">
-        <span id="stats-days" class="stats-value">--</span>
-        <span class="stats-label">วัน</span>
-      </div>
-      <div class="stats-row">
-        <span id="stats-hours" class="stats-value">--</span>
-        <span class="stats-label">ชม.</span>
-      </div>
-      <div class="stats-row">
-        <span id="stats-minutes" class="stats-value">--</span>
-        <span class="stats-label">นาที</span>
-      </div>
-      <div class="stats-row">
-        <span id="stats-seconds" class="stats-value">--</span>
-        <span class="stats-label">วินาที</span>
+    <div id="conflict-modal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3>&#x26A0;&#xFE0F; ข้อมูลถูกแก้โดยคนอื่น</h3>
+          <button id="conflict-close" class="modal-close">&#x2715;</button>
+        </div>
+        <p class="conflict-desc">
+          ข้อมูลใน server เปลี่ยนไปแล้วขณะที่คุณกำลังแก้
+        </p>
+        <div class="conflict-compare">
+          <div class="conflict-col">
+            <div class="conflict-col-label">ของคุณ</div>
+            <pre id="conflict-mine" class="conflict-pre"></pre>
+          </div>
+          <div class="conflict-col">
+            <div class="conflict-col-label">ล่าสุดใน server</div>
+            <pre id="conflict-server" class="conflict-pre"></pre>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button id="conflict-overwrite" class="btn-primary">
+            บันทึกของฉัน (เขียนทับ)
+          </button>
+          <button id="conflict-discard" class="btn-secondary">
+            ใช้ของ server
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-</body>
+    <div id="place-editor-modal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 id="place-editor-title">เพิ่มสถานที่</h3>
+          <button id="place-editor-close" class="modal-close">&#x2715;</button>
+        </div>
+        <label class="modal-label"
+          >ชื่อสถานที่
+          <input type="text" id="place-editor-name" class="modal-input" />
+        </label>
+        <label class="modal-label"
+          >กิจกรรม (แต่ละบรรทัด = 1 กิจกรรม)
+          <textarea
+            id="place-editor-acts"
+            class="modal-textarea"
+            rows="3"
+          ></textarea>
+        </label>
+        <label class="modal-label"
+          >💰 ค่าใช้จ่าย (¥)
+          <input
+            type="number"
+            id="place-editor-expense"
+            class="modal-input"
+            value="0"
+            min="0"
+          />
+        </label>
+        <label class="modal-label"
+          >👥 หารโดย
+          <div id="place-editor-split" class="split-checkboxes"></div>
+        </label>
+        <label class="modal-label"
+          >📍 พิกัด
+          <div class="coord-row">
+            <input
+              type="text"
+              id="place-editor-search"
+              class="modal-input"
+              placeholder="ค้นหาชื่อสถานที่..."
+            />
+            <button
+              id="place-editor-search-btn"
+              class="btn-secondary btn-sm"
+              type="button"
+            >
+              🔍
+            </button>
+          </div>
+          <div id="place-editor-results" class="search-results hidden"></div>
+          <p
+            class="coord-hint"
+            style="
+              cursor: pointer;
+              text-decoration: underline;
+              text-decoration-style: dashed;
+            "
+          >
+            หรือคลิกที่ตำแหน่งบนแผนที่เพื่อเลือกพิกัด
+          </p>
+        </label>
+        <div class="modal-actions">
+          <button id="place-editor-save" class="btn-primary">บันทึก</button>
+          <button id="place-editor-cancel" class="btn-secondary">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
 
+    <!-- Lofi Background Music -->
+    <!-- Replace src with your preferred lofi track from Pixabay or similar -->
+    <audio id="lofi-audio" loop preload="auto">
+      <source src="./bg-lofi.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="config.js"></script>
+    <script src="db.js"></script>
+    <script src="day-places.js"></script>
+    <script src="selection.js"></script>
+    <script src="realtime.js"></script>
+    <script src="editor.js"></script>
+    <script src="conflict.js"></script>
+    <script src="script.js"></script>
+
+    <div id="stats-widget" class="stats-widget hidden">
+      <div class="stats-pill">
+        <span class="stats-pill-text"
+          >✈️ <span id="stats-pill-value">--</span></span
+        >
+      </div>
+      <div class="stats-expanded">
+        <div class="stats-row">
+          <span id="stats-days" class="stats-value">--</span>
+          <span class="stats-label">วัน</span>
+        </div>
+        <div class="stats-row">
+          <span id="stats-hours" class="stats-value">--</span>
+          <span class="stats-label">ชม.</span>
+        </div>
+        <div class="stats-row">
+          <span id="stats-minutes" class="stats-value">--</span>
+          <span class="stats-label">นาที</span>
+        </div>
+        <div class="stats-row">
+          <span id="stats-seconds" class="stats-value">--</span>
+          <span class="stats-label">วินาที</span>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
