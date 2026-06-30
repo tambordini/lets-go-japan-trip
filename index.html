@@ -143,6 +143,45 @@
     </div>
   </div>
 
+  <div id="place-editor-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="place-editor-title">เพิ่มสถานที่</h3>
+        <button id="place-editor-close" class="modal-close">&#x2715;</button>
+      </div>
+      <label class="modal-label">ชื่อสถานที่
+        <input type="text" id="place-editor-name" class="modal-input" />
+      </label>
+      <label class="modal-label">กิจกรรม (แต่ละบรรทัด = 1 กิจกรรม)
+        <textarea id="place-editor-acts" class="modal-textarea" rows="3"></textarea>
+      </label>
+      <label class="modal-label">💰 ค่าใช้จ่าย (¥)
+        <input type="number" id="place-editor-expense" class="modal-input" value="0" min="0" />
+      </label>
+      <label class="modal-label">👥 หารโดย
+        <div id="place-editor-split" class="split-checkboxes"></div>
+      </label>
+      <label class="modal-label">📍 พิกัด
+        <div class="coord-row">
+          <input type="text" id="place-editor-search" class="modal-input" placeholder="ค้นหาชื่อสถานที่..." />
+          <button id="place-editor-search-btn" class="btn-secondary btn-sm" type="button">🔍</button>
+        </div>
+        <div id="place-editor-results" class="search-results hidden"></div>
+        <p class="coord-hint" style="cursor:pointer;text-decoration:underline;text-decoration-style:dashed;">
+          หรือคลิกที่ตำแหน่งบนแผนที่เพื่อเลือกพิกัด
+        </p>
+        <div class="coord-fields">
+          <input type="text" id="place-editor-lat" class="modal-input modal-input-sm" placeholder="ละติจูด" readonly />
+          <input type="text" id="place-editor-lng" class="modal-input modal-input-sm" placeholder="ลองจิจูด" readonly />
+        </div>
+      </label>
+      <div class="modal-actions">
+        <button id="place-editor-save" class="btn-primary">บันทึก</button>
+        <button id="place-editor-cancel" class="btn-secondary">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Lofi Background Music -->
   <!-- Replace src with your preferred lofi track from Pixabay or similar -->
   <audio id="lofi-audio" loop preload="auto">
@@ -152,6 +191,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="config.js"></script>
   <script src="db.js"></script>
+  <script src="day-places.js"></script>
   <script src="selection.js"></script>
   <script src="realtime.js"></script>
   <script src="editor.js"></script>
